@@ -12,7 +12,7 @@ import warnings
 from .utils.format import _pprint
 
 
-class BaseRecommender(object):
+class BaseEstimator(object):
     """Base Class for Recommenders that suggest items for users.
 
     Should not be used directly, use derived classes instead
@@ -36,7 +36,7 @@ class BaseRecommender(object):
             # to represent
             args, varargs, kw, default = inspect.getargspec(init)
             if not varargs is None:
-                raise RuntimeError('crab recommenders should always '
+                raise RuntimeError('crab estimators should always '
                                    'specify their parameters in the signature'
                                    ' of their init (no varargs).')
             # Remove 'self'
@@ -101,14 +101,14 @@ class BaseRecommender(object):
                 # nested objects case
                 name, sub_name = split
                 if not name in valid_params:
-                    raise ValueError('Invalid param %s for reccommender %s' %
+                    raise ValueError('Invalid param %s for recommender %s' %
                                      (name, self))
                 sub_object = valid_params[name]
                 sub_object.set_params(**{sub_name: value})
             else:
                 # simple objects case
                 if not key in valid_params:
-                    raise ValueError('Invalid param %s ' 'for reccommender %s'
+                    raise ValueError('Invalid param %s ' 'for recommender %s'
                                      % (key, self.__class__.__name__))
                 setattr(self, key, value)
         return self
