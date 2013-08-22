@@ -72,7 +72,7 @@ class OrderedSet(MutableSet):
         elif len(self) < 10:
             return u'%s(%r)' % (self.__class__.__name__, list(self))
         else:
-            return u'%s(%r...%r)' % (self.__class__.__name__, self[0], self[len(self)])
+            return u'%s([%r...%r])' % (self.__class__.__name__, self[0], self[len(self)-1])
 
     def __getstate__(self):
         return list(self)       
@@ -103,8 +103,31 @@ class OrderedSet(MutableSet):
     
     __iadd__ = extend
 
-    merge = set.union
-    
+    def merge(self, other):
+        """
+        Returns a new OrderedSet that merges this with another. 
+        The indices from this OrderedSet will remain the same, and this
+        method will return a mapping of the news indices for the other
+        OrderedSet.
+
+        Returns a tuple of `merged`, which is the combined OrderedSet, and
+        `indices`, a list the length of `other` giving the new index for each
+        of its entries.
+
+        >>> from crab.data.categorical import OrderedSet
+        >>> set1 = OrderedSet(['red', 'orange', 'yellow', 'green', 'blue'])
+        >>> set2 = OrderedSet(['cyan', 'magenta', 'yellow'])
+        >>> merged, indices = set1.merge(set2)
+        >>> for item in merged:
+        ...     print item,
+        red orange yellow green blue cyan magenta
+        >>> print indices
+        [5, 6, 2]
+        """
+        merged = self.copy()
+        indices = [merged.add(item) for item in other]
+        return merged, indices
+
     def discard(self, key):
         """Discard an item from the Categorical Set."""
         raise NotImplementedError(

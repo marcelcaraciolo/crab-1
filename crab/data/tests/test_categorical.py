@@ -43,7 +43,6 @@ def test_lookup_methods():
     assert_equal(ct.index('c'), 2)
     assert_equal(ct.index('d'), 3) 
     assert_equal(ct.index('e'), 4)
-    
     assert_equal(ct.index_for('d'), 3)
 
 def test_getsetitem():
@@ -58,28 +57,77 @@ def test_getsetitem():
     assert_equal(ct[2],'f')
     assert_raises(IndexError, ct.__setitem__, 7, 'casa')
 
-
-'''
-
 def test_copy():
+    ct = OrderedSet(['a', 'b', 'c', 'a', 'd', 'e'])
+    ct_cpy = ct.copy()
+    assert(ct is not ct_cpy)
+    assert(ct == ct_cpy)
 
 def test_repr():
+    #repr() of an empty OrderedSet should not fail
+    ct_empty  = OrderedSet()
+    assert_equal(repr(ct_empty), "OrderedSet()")
 
-def test_getset_state():
+    ct = OrderedSet(['a', 'b', 'c', 'a', 'd', 'e'])
+    assert_equal(repr(ct),"OrderedSet(['a', 'b', 'c', 'd', 'e'])")
+
+    ct = OrderedSet(range(30))
+    assert_equal(repr(ct),"OrderedSet([0...29])")
 
 def test_reversed():
+    ct_empty  = OrderedSet()
+    l = [ i for i in reversed(ct_empty)]
+    assert_equal(l, [])
 
-def test_pop():
+    ct = OrderedSet(['a', 'b', 'c', 'a', 'd', 'e'])
+    l = [ i for i in reversed(ct)]
+    assert_equal(l, ['e', 'd', 'c', 'b', 'a'])
 
-def test_add():
+def test_add(): 
+    ct_empty  = OrderedSet()
+    ct_empty.add('a')
+    assert_equal(ct_empty, OrderedSet(['a']))
+    
+    ct_empty.add('a')
+    assert_equal(ct_empty, OrderedSet(['a']))
+    
+    ct_empty.append('b')
+    assert_equal(ct_empty, OrderedSet(['a', 'b']))
 
 def test_extend():
+    ct_empty = OrderedSet()
+    ct_empty.extend([2,3,4,5])
+    assert_equal(ct_empty, OrderedSet([2,3,4,5]))
+
+    ct_empty.extend(OrderedSet([3,4,5,6,2]))
+    assert_equal(ct_empty, OrderedSet([2,3,4,5,6]))
 
 def test_merge():
+    ct_empty = OrderedSet()
+    merged = ct_empty.merge(OrderedSet([1,2,3,4]))
+    assert_equal(merged, (OrderedSet([1,2,3,4]), [0,1,2,3]))
 
 def test_discard():
+    ct = OrderedSet([2,3,4,5])
+    assert_raises(NotImplementedError, ct.discard, 3)
 
 def test_del():
+    ct = OrderedSet([2,3,4,5,6])
+    assert_equal(hasattr(ct, '__del__'), False)
 
 def test_iter():
-'''
+    ct_empty  = OrderedSet()
+    l = [ i for i in iter(ct_empty)]
+    assert_equal(l, [])
+
+    ct = OrderedSet(['a', 'b', 'c', 'a', 'd', 'e'])
+    l = [ i for i in iter(ct)]
+    assert_equal(l, ['a', 'b', 'c', 'd', 'e'])
+
+def test_pickle():
+    ct = OrderedSet(['a','b','c'])
+    import cPickle as pickle
+    ctp = pickle.loads(pickle.dumps(ct))
+    assert_equal(ct, ctp)
+    assert_equal(ct[0], 'a')
+    assert_equal(ct.index('b'), 1)
