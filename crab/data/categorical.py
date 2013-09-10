@@ -156,3 +156,62 @@ class OrderedSet(MutableSet):
     def __ne__(self, other):
         return not self == other
 
+
+def map_indices(indices, indexables):
+    #Check if it is an integer
+    if isinstance(indices, int): return indexables[1:]
+
+
+
+
+    # Check a few common cases first
+    if isinstance(indices, int): return indexables[1:]
+    # TODO: check more.
+    
+    # Make indices into a list
+    if isinstance(indices, tuple):
+        indices = list(indices)
+    else:
+        indices = [indices]
+    indexables = list(indexables)
+
+    num_axes_in_data = len(indexables)
+    num_axes_known = len(indices)
+    for index in indices:
+        # .count doesn't work over things that might be NumPy arrays
+        if index is None or index is Ellipsis:
+            num_axes_known -= 1
+
+    if num_axes_known > num_axes_in_data:
+        raise IndexError("Too many indices")
+
+    # Expand ellipses... from right to left, it turns out.
+    for i in reversed(xrange(len(indices))):
+        if indices[i] is Ellipsis:
+            indices[i:i+1] = [ALL] * (num_axes_in_data - num_axes_known)
+            num_axes_known = num_axes_in_data
+
+    while num_axes_known < num_axes_in_data:
+        indices.append(ALL)
+        num_axes_known += 1
+
+    results = []
+    which_indexable = 0
+    # Now step through the axes and get stuff
+    for index in indices:
+        if index is newaxis:
+            results.append(None)
+        else:
+            indexable = indexables[which_indexable]
+            if hasattr(index, '__index__') and not hasattr(index, 'shape'):
+                # simple index: drop this result
+                pass
+            elif indexable is None:
+                results.append(None)
+            else:
+                results.append(indexable[index])
+            which_indexable += 1
+    return results
+
+
+
