@@ -49,6 +49,7 @@ def test_getsetitem():
     ct = OrderedSet(['a', 'b', 'c', 'a', 'd', 'e'])
     assert_equal(ct[2], 'c')
     assert_equal(ct[0:3], OrderedSet(['a', 'b', 'c']))
+    assert_equal(ct[1:], OrderedSet(['b','c', 'd', 'e']))
     assert_raises(TypeError, ct.__getitem__, None)
     assert_raises(TypeError, ct.__getitem__, '0')
 

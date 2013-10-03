@@ -1,6 +1,5 @@
 #-*- coding: utf-8 -*-
 
-import numpy as np
 from numpy.testing import assert_equal
 from ..dense import DenseVector
 from ..categorical import OrderedSet

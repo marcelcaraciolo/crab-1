@@ -35,9 +35,6 @@ class DenseArray(NDenseArray, np.ndarray):
     
     def __new__(cls, input_array, *args, **kwargs):
         raise NotImplemented('DenseArray is an abstract class')
-    
-    def _dot(self, other):
-        raise NotImplementedError
 
     def __getitem__(self, indices):
         data = np.ndarray.__getitem__(self, indices)
@@ -47,7 +44,7 @@ class DenseArray(NDenseArray, np.ndarray):
         """
         Element-wise multiplication.
         """
-        from operators import multipliy as safe_multiply
+        from operators import multiply as safe_multiply
         return safe_multiply(self, other)
 
     def dot(self, other):
