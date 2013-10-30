@@ -4,6 +4,7 @@ import numpy as np
 from numpy.testing import assert_equal, assert_almost_equal
 from nose.tools import assert_raises
 from ..dense import DenseVector
+from ..dense import DenseMatrix
 
 def test_dense_vector():
     row = DenseVector([0, 1], ['A' , 'B'])
@@ -41,3 +42,29 @@ def test_dense_vector_operators():
     assert_almost_equal(col.normalize(), DenseVector([0.4472136, 0.89442719], ['C', 'D']))
 
     assert_equal(col.transpose_dot(col), 5)
+
+def test_dense_matrix():
+    matrix_1 = DenseMatrix([[0, 1], [2, 3]], ['A', 'B'], ['C', 'D'])
+ 
+    row_0 = DenseVector([0, 1], ['C', 'D'])
+    col_0 = DenseVector([0, 2], ['A', 'B'])
+    assert_equal(matrix_1[0], row_0)
+    assert_equal(matrix_1[0,:],row_0)
+    assert_equal(matrix_1[:,0],col_0)
+    assert_equal(matrix_1.get_row(0), row_0)
+    assert_equal(matrix_1.get_col(0),col_0)
+
+
+def test_dense_matrix_label_lookups():
+
+    matrix_1 = DenseMatrix([[0, 1], [2, 3]], ['A', 'B'], ['C', 'D'])
+    matrix_2 = DenseMatrix([[0, 1], [2, 3]], ['A', 'B'], None)
+
+    assert np.all(matrix_1.row_named('A') == matrix_1[0])
+    assert np.all(matrix_1.col_named('D') == matrix_1[:, 1])
+    assert np.all(matrix_2.row_named('A') == matrix_2[0])
+    assert np.all(matrix_2.col_named(1) == matrix_2[:, 1])
+    assert matrix_1.entry_named('B', 'C') == matrix_1[1, 0]
+    assert matrix_2.entry_named('B', 0) == matrix_2[1, 0]
+
+

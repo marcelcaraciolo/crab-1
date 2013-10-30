@@ -166,6 +166,6 @@ def map_indices(indices, indexables):
     the things to be indexed.
     """
     #Check if it is an integer
-    print indices, indexables, indexables[1:]
+    #print indices, indexables, indexables[1:]
     if isinstance(indices, int): return indexables[1:]
 

@@ -88,7 +88,7 @@ class DenseMatrix(DenseArray, LabeledMatrixMixin):
         elif isinstance(row_labels, OrderedSet):
             obj.row_labels = OrderedSet(row_labels)
         else:
-            print 'converting rows to OrderedSet'
+            #print 'converting rows to OrderedSet'
             obj.row_labels = OrderedSet(row_labels)
 
         if obj.row_labels is not None:
@@ -99,7 +99,7 @@ class DenseMatrix(DenseArray, LabeledMatrixMixin):
         elif isinstance(col_labels, OrderedSet):
             obj.col_labels = col_labels
         else:
-            print 'converting cols to OrderedSet'
+            #print 'converting cols to OrderedSet'
             obj.col_labels = OrderedSet(col_labels)
 
         if obj.col_labels is not None:
@@ -114,6 +114,35 @@ class DenseMatrix(DenseArray, LabeledMatrixMixin):
 
     def __repr__(self):
         return '<DenseMatrix (%d by %d)' % (self.shape[0], self.shape[1])
-        
+    
+    def get_row(self, row_idx):
+        return DenseVector(np.ndarray.__getitem__(self, row_idx), self.col_labels)
+
+    def get_col(self, col_idx):
+        return DenseVector(np.ndarray.__getitem__(self, (slice(None), col_idx)), self.row_labels)
+
+    def row_named(self, label):
+        '''
+        Get the row with a given label as a vector.
+        '''
+        return self.get_row(self.row_index(label))
+
+    def col_named(self, label):
+        '''
+        Get the column with a given label as vector
+        '''
+        return self.get_col(self.col_index(label))
+
+    def entry_named(self, row_label, col_label):
+        '''
+        Get the entry with a given rown and a given label
+        '''
+        return np.ndarray.__getitem__(self, (self.row_index(row_label), self.col_index(col_label)))
+
+
+
+    
+
+
     
         
