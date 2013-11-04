@@ -67,4 +67,7 @@ def test_dense_matrix_label_lookups():
     assert matrix_1.entry_named('B', 'C') == matrix_1[1, 0]
     assert matrix_2.entry_named('B', 0) == matrix_2[1, 0]
 
+def test_dense_matrix_to_array():
+    matrix_1 = DenseMatrix([[0, 1], [2, 3]], ['A', 'B'], ['C', 'D'])
+    assert np.all(matrix_1.to_array() == np.array([[0,1],[2,3]]))
 

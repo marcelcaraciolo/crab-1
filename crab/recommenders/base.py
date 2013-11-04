@@ -13,15 +13,15 @@ class BaseRecommender(BaseEstimator):
     Should not be used directly, use derived classes instead.
     """
 
-    def recommend(self, X, how_many, **params):
+    def recommend(self, uid, how_many,  **params):
         """
         Recommend new items for a set of id's. It assumes 
         that you've already called fit().
 
         Parameters
         ----------
-        X: array-like, 1D 
-        List of Id's that will receive the recommendations. 
+        uid: int
+        Id that will receive the recommendations. 
 
         how_many: int
         Maximum number of recommended items to return for a Id. 
@@ -31,4 +31,4 @@ class BaseRecommender(BaseEstimator):
         Return a list of recommended items, ordered from most strongly
         recommend to least.
         """
- 
+        pass 

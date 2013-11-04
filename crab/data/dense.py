@@ -139,10 +139,9 @@ class DenseMatrix(DenseArray, LabeledMatrixMixin):
         '''
         return np.ndarray.__getitem__(self, (self.row_index(row_label), self.col_index(col_label)))
 
+    def to_array(self):
+        '''
+        Return the matrix as numpy array
+        '''
+        return np.asarray(self)
 
-
-    
-
-
-    
-        
